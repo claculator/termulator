@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termulator (WebAssembly build)</title>
+<style>
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:#000000;
+    font-family:'JetBrains Mono','Fira Code',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color:#e8e8e8;
+  }
+  .wrap{max-width:900px; margin:4vh auto; padding:0 16px;}
+  .titlebar{
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px;
+    background:#000000;
+    border:1px solid #333333;
+    border-bottom:none;
+    border-radius:10px 10px 0 0;
+  }
+  .dot{width:11px;height:11px;border-radius:50%;}
+  .dot.r{background:#e0645a;} .dot.y{background:#e0b95a;} .dot.g{background:#5ac97a;}
+  .titletext{margin-left:10px; color:#888888; font-size:12.5px; letter-spacing:.04em;}
+  #term{
+    background:#000000;
+    border:1px solid #333333;
+    border-radius:0 0 10px 10px;
+    padding:20px;
+    height:62vh;
+    min-height:420px;
+    overflow-y:auto;
+    font-size:14.5px;
+    line-height:1.55;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  #term::-webkit-scrollbar{width:10px;}
+  #term::-webkit-scrollbar-thumb{background:#333333;border-radius:6px;}
+  .note{
+    margin:10px 2px 0;
+    color:#888888;
+    font-size:12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <div class="titletext">termulator — wasm build</div>
+  </div>
+  <div id="term"></div>
+  <div class="note">This runs the real compiled main.cpp as WebAssembly. Input is collected through browser prompt dialogs, since a real terminal needs those to pause and wait for you the same way the original console program does.</div>
+</div>
+
+<script>
+  const termEl = document.getElementById('term');
+  function write(text){
+    termEl.textContent += text;
+    termEl.scrollTop = termEl.scrollHeight;
+  }
+
+  var Module = {
+    print: (text) => write(text + "\n"),
+    printErr: (text) => write(text + "\n"),
+    stdin: () => {
+      if (!Module._inBuf || Module._inBuf.length === 0) {
+        let line = window.prompt("Termulator input:");
+        if (line === null) line = "";
+        write(line + "\n");
+        Module._inBuf = Array.from(line + "\n").map(c => c.charCodeAt(0));
+      }
+      return Module._inBuf.shift();
+    }
+  };
+</script>
+<script src="termulator.js"></script>
+</body>
+</html>
