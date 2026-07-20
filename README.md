@@ -1,10 +1,13 @@
-Command list
-help: Displays list of commands
-dir: Lists directories
-cd: changes current directory to specified one (usage: cd <directory>
-run: executes the given function or program (usage: run <program/function> <arg1> <arg2>)
-res: parses .res file (usage res <file.res>)
-clear: clears the terminal
-exit: ends the program
+# Command List
 
-you can also view this list by running the "help" command
+| Command | Description | Usage |
+|---------|-------------|-------|
+| `help`  | Displays list of commands | `help` |
+| `dir`   | Lists directories | `dir` |
+| `cd`    | Changes current directory to specified one | `cd <directory>` |
+| `run`   | Executes the given function or program | `run <program/function> <arg1> <arg2>` |
+| `res`   | Parses a `.res` file | `res <file.res>` |
+| `clear` | Clears the terminal | `clear` |
+| `exit`  | Ends the program | `exit` |
+
+> You can also view this list at any time by running the `help` command.
